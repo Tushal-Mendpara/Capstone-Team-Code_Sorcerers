@@ -1,0 +1,8 @@
+Give your custom input to the programme using below clubs and their categories
+
+
+Arts : (Khoj, Music_Club, Dance_Club, DA-IICT_Theatre, Khelaiya_Club, Photography_Club)
+Technology : (Programming_Club, GDSC, IEEE_Student_Branch, Electronics_Hobby_Club, MSTC,Muse_club, AI_Club)
+Social : (Press_Club, Debate_Club, Sambhav, Heritage_Club, Radio_Club)
+General : (DCEI, Business_Club, Headrush)
+Sports : (Chess_Club, Cubing_Club)
