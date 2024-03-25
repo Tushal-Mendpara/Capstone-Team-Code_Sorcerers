@@ -171,59 +171,61 @@ int main() {
     inputFile.close();
 
     // Prompt user for search type
-    cout << "Select search type:" << endl;
-    cout << "1. Search by club name" << endl;
-    cout << "2. Search by member name" << endl;
-    cout << "3. Search by member ID" << endl;
-    cout << "4. Search by club category" << endl;
-    cout << "5. Exit" << endl; // Added option to exit the program
-    cout << "Enter your choice: ";
-    int choice;
-    cin >> choice;
-
-    // Perform search based on user choice
-    switch (choice) {
-        case 1: {
-            string club_name;
-            cout << "Enter club name: ";
-            cin >> club_name;
-            search_by_club_name(club_name);
-            break;
+    int choice=0;
+    while(choice<5){    
+        cout << "Select search type:" << endl;
+        cout << "1. Search by club name" << endl;
+        cout << "2. Search by member name" << endl;
+        cout << "3. Search by member ID" << endl;
+        cout << "4. Search by club category" << endl;
+        cout << "5. Exit" << endl; // Added option to exit the program
+        cout << "Enter your choice: ";
+        cin >> choice;
+        cout<<endl;
+        // Perform search based on user choice
+        switch (choice) {
+            case 1: {
+                string club_name;
+                cout << "Enter club name: ";
+                cin >> club_name;
+                search_by_club_name(club_name);
+                break;
+            }
+            case 2: {
+                string member_name;
+                cout << "Enter member name: ";
+                cin >> member_name;
+                search_by_member_name(member_name);
+                break;
+            }
+            case 3: {
+                string student_id;
+                cout << "Enter member ID: ";
+                cin >> student_id;
+                search_by_id(student_id);
+                break;
+            }
+            case 4: {
+                cout << "Select club category:" << endl;
+                cout << "1. Arts" << endl;
+                cout << "2. Technical" << endl;
+                cout << "3. Social" << endl;
+                cout << "4. General" << endl;
+                cout << "5. Sports" << endl;
+                cout << "Enter category number: ";
+                int category_choice;
+                cin >> category_choice;
+                search_by_club_category(static_cast<ClubCategory>(category_choice - 1));
+                break;
+            }
+            case 5: // Exit the program
+                cout << "Exiting the program..." << endl;
+                return 0;
+            default:
+                cout << "Invalid choice" << endl;
+                break;
         }
-        case 2: {
-            string member_name;
-            cout << "Enter member name: ";
-            cin >> member_name;
-            search_by_member_name(member_name);
-            break;
-        }
-        case 3: {
-            string student_id;
-            cout << "Enter member ID: ";
-            cin >> student_id;
-            search_by_id(student_id);
-            break;
-        }
-        case 4: {
-            cout << "Select club category:" << endl;
-            cout << "1. Arts" << endl;
-            cout << "2. Technical" << endl;
-            cout << "3. Social" << endl;
-            cout << "4. General" << endl;
-            cout << "5. Sports" << endl;
-            cout << "Enter category number: ";
-            int category_choice;
-            cin >> category_choice;
-            search_by_club_category(static_cast<ClubCategory>(category_choice - 1));
-            break;
-        }
-        case 5: // Exit the program
-            cout << "Exiting the program..." << endl;
-            return 0;
-        default:
-            cout << "Invalid choice" << endl;
-            break;
+        cout<<endl;
     }
-
     return 0;
 }
