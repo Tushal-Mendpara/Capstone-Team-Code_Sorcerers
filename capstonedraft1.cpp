@@ -6,6 +6,7 @@ enum ClubCategory { Arts, Technical, Social, General, Sports };
 
 // Structure to represent a member
 struct Member {
+    string name;
     string student_id;
     vector<string> clubs;
 };
@@ -28,6 +29,7 @@ unordered_map<string, ClubCategory> club_categories = {
 // Function to add a new member
 void add_member(const string& name, const string& student_id, const vector<string>& clubs) {
     Member member;
+    member.name=name;
     member.student_id = student_id;
     member.clubs = clubs;
     member_hash_table[name] = member;
@@ -58,7 +60,7 @@ void search_by_member_name(const string& member_name) {
         Member& member = it->second;
         cout << "Member: " << member_name << ", ID: " << member.student_id << "\n";
         cout << "Clubs: ";
-        for (size_t i = 0; i < member.clubs.size(); ++i) {
+        for (int i = 0; i < member.clubs.size(); ++i) {
             cout << member.clubs[i];
             if (i != member.clubs.size() - 1) {
                 cout << ", ";
@@ -77,7 +79,7 @@ void search_by_id(const string& student_id) {
             cout << "Member: " << entry.first << ", ID: " << student_id << "\n";
             cout << "Clubs: ";
             const Member& member = entry.second;
-            for (size_t i = 0; i < member.clubs.size(); ++i) {
+            for (int i = 0; i < member.clubs.size(); ++i) {
                 cout << member.clubs[i];
                 if (i != member.clubs.size() - 1) {
                     cout << ", ";
@@ -113,38 +115,19 @@ void search_by_club_category(ClubCategory category) {
             cout << "Invalid club category" << endl;
             return;
     }
-
-    vector<string> matched_members;
+    
+    bool flage=false;
     for (const auto& entry : member_hash_table) {
         const Member& member = entry.second;
-        if (category == Technical) {
-            bool found_technical = false;
-            for (const string& club : member.clubs) {
-                if (club_categories[club] == category) {
-                    found_technical = true;
-                    break;
-                }
-            }
-            if (found_technical) {
-                matched_members.push_back(entry.first);
-            }
-        } else {
-            for (const string& club : member.clubs) {
-                if (club_categories[club] == category) {
-                    matched_members.push_back(entry.first);
-                    break; // No need to check other clubs for this member
-                }
+        for (const string& club : member.clubs) {
+            if (club_categories[club] == category) {
+                cout << "Member: " << member.name << ", ID: " << member.student_id << endl;
+                flage=true;
             }
         }
     }
-
-    if (matched_members.empty()) {
+    if(!flage){
         cout << "No members found in the " << category_str << " category" << endl;
-    } else {
-        cout << "Members in the " << category_str << " category Clubs :" << endl;
-        for (const string& member_name : matched_members) {
-            cout << "Member: " << member_name << ", ID: " << member_hash_table[member_name].student_id << endl;
-        }
     }
 }
 
@@ -170,8 +153,7 @@ int main() {
     }
     inputFile.close();
 
-    // Prompt user for search type
-    int choice=0;
+     int choice=0;
     while(choice<5){    
         cout << "Select search type:" << endl;
         cout << "1. Search by club name" << endl;
