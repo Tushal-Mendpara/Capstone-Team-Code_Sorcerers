@@ -18,13 +18,7 @@ unordered_map<string, Member> member_hash_table;
 unordered_map<string, vector<string>> club_index;
 
 // Map to associate each club with its category
-unordered_map<string, ClubCategory> club_categories = {
-    {"Khoj", Arts}, {"Music_Club", Arts}, {"Dance_Club", Arts}, {"DA-IICT_Theatre", Arts}, {"Khelaiya_Club", Arts}, {"Photography_Club", Arts},
-    {"Programming_Club", Technical}, {"GDSC", Technical}, {"IEEE_Student_Branch", Technical}, {"Electronics_Hobby_Club", Technical}, {"MSTC", Technical}, {"Muse_club", Technical}, {"AI_Club", Technical},
-    {"Press_Club", Social}, {"Debate_Club", Social}, {"Sambhav", Social}, {"Heritage_Club", Social}, {"Radio_Club", Social},
-    {"DCEI", General}, {"Business_Club", General}, {"Headrush", General},
-    {"Chess_Club", Sports}, {"Cubing_Club", Sports}
-};
+unordered_map<string, ClubCategory> club_categories;
 
 // Function to add a new member
 void add_member(const string& name, const string& student_id, const vector<string>& clubs) {
@@ -38,6 +32,22 @@ void add_member(const string& name, const string& student_id, const vector<strin
     for (const string& club : clubs) {
         club_index[club].push_back(name);
     }
+}
+
+void add_member_in_file(const string& name, const string& student_id, const vector<string>& clubs) {
+    // Append member to the file
+    ofstream memberFile("club_members.txt", ios::app);
+    if (!memberFile.is_open()) {
+        cout << "Unable to open club members file" << endl;
+        return;
+    }
+    memberFile << endl;
+    memberFile << name << " " << student_id;
+    for (const string& club : clubs) {
+        memberFile << " " << club;
+    }
+    memberFile.close();
+    cout << "New member " << name << " added successfully" << endl;
 }
 
 // Function to search for members by club name
@@ -92,28 +102,30 @@ void search_by_id(const string& student_id) {
     cout << "Member with ID " << student_id << " not found" << endl;
 }
 
-// Function to search for members by club category
-void search_by_club_category(ClubCategory category) {
+string str_category(ClubCategory category){
     string category_str;
     switch (category) {
         case Arts:
-            category_str = "Arts";
-            break;
+            return "Arts";
         case Technical:
-            category_str = "Technical";
-            break;
+            return "Technical";
         case Social:
-            category_str = "Social";
-            break;
+            return "Social";
         case General:
-            category_str = "General";
-            break;
+            return "General";
         case Sports:
-            category_str = "Sports";
-            break;
+            return "Sports";
         default:
-            cout << "Invalid club category" << endl;
-            return;
+            return "";
+    }
+}
+
+// Function to search for members by club category
+void search_by_club_category(ClubCategory category) {
+    string category_str = str_category(category);
+    if(category_str==""){
+        cout << "Invalid club category" << endl;
+        return;
     }
     
     bool flage=false;
@@ -121,7 +133,7 @@ void search_by_club_category(ClubCategory category) {
         const Member& member = entry.second;
         for (const string& club : member.clubs) {
             if (club_categories[club] == category) {
-                cout << "Member: " << member.name << ", ID: " << member.student_id << endl;
+                cout << "Member: " << member.name << ", ID: " << member.student_id << ", Club: "<< club << endl;
                 flage=true;
             }
         }
@@ -131,6 +143,35 @@ void search_by_club_category(ClubCategory category) {
     }
 }
 
+// Function to add a new club to the map and file
+void add_new_club(const string& club_name, ClubCategory category) {
+    // Add club to the map
+    club_categories[club_name] = category;
+
+    // Append club and category to the file
+    ofstream categoryFile("club_category.txt", ios::app);
+    if (!categoryFile.is_open()) {
+        cout << "Unable to open club category file" << endl;
+        return;
+    }
+    categoryFile << endl;
+    categoryFile << club_name << " ";
+    string categoryFilestr = str_category(category);
+    if(categoryFilestr==""){
+        cout << "Invalid club category" << endl;
+        return;
+    }
+    categoryFile << categoryFilestr;
+    categoryFile.close();
+}
+
+void print_category(void){
+    cout << "1. Arts" << endl;
+    cout << "2. Technical" << endl;
+    cout << "3. Social" << endl;
+    cout << "4. General" << endl;
+    cout << "5. Sports" << endl;
+}
 
 int main() {
     ifstream inputFile("club_members.txt");
@@ -153,14 +194,39 @@ int main() {
     }
     inputFile.close();
 
-     int choice=0;
-    while(choice<5){    
+    ifstream categoryFile("club_category.txt");
+    if (!categoryFile.is_open()) {
+        cout << "Unable to open club category file" << endl;
+        return 1;
+    }
+
+    // Read club categories from the file and populate club_categories map
+    string club, category;
+    while (categoryFile >> club >> category) {
+        if (category == "Arts") {
+            club_categories[club] = Arts;
+        } else if (category == "Technical") {
+            club_categories[club] = Technical;
+        } else if (category == "Social") {
+            club_categories[club] = Social;
+        } else if (category == "General") {
+            club_categories[club] = General;
+        } else if (category == "Sports") {
+            club_categories[club] = Sports;
+        }
+    }
+    categoryFile.close();
+    string pass="Daiict@2023",epass;
+    int choice=0;
+    while(choice<7){    
         cout << "Select search type:" << endl;
         cout << "1. Search by club name" << endl;
         cout << "2. Search by member name" << endl;
         cout << "3. Search by member ID" << endl;
         cout << "4. Search by club category" << endl;
-        cout << "5. Exit" << endl; // Added option to exit the program
+        cout << "5. Add new club" <<endl;
+        cout << "6. Add new member" <<endl;
+        cout << "7. Exit" << endl; // Added option to exit the program
         cout << "Enter your choice: ";
         cin >> choice;
         cout<<endl;
@@ -189,18 +255,58 @@ int main() {
             }
             case 4: {
                 cout << "Select club category:" << endl;
-                cout << "1. Arts" << endl;
-                cout << "2. Technical" << endl;
-                cout << "3. Social" << endl;
-                cout << "4. General" << endl;
-                cout << "5. Sports" << endl;
+                print_category();
                 cout << "Enter category number: ";
                 int category_choice;
                 cin >> category_choice;
                 search_by_club_category(static_cast<ClubCategory>(category_choice - 1));
                 break;
             }
-            case 5: // Exit the program
+            case 5: {
+                cout<<"Enter Password : ";
+                cin>>epass;
+                if(epass!=pass){
+                    cout<<"Wrong Password"<<endl;
+                    cout<<"You don't have access to enter club"<<endl;
+                    break;
+                }
+                string club_name;
+                int category_choice;
+                cout << "Enter the name of the new club: ";
+                cin >> club_name;
+                cout << "Select category for the club:" << endl;
+                print_category();
+                cout << "Enter category number: ";
+                cin >> category_choice;
+                add_new_club(club_name, static_cast<ClubCategory>(category_choice - 1));
+                break;
+            }
+            case 6: {
+                cout<<"Enter Password : ";
+                cin>>epass;
+                if(epass!=pass){
+                    cout<<"Wrong Password"<<endl;
+                    cout<<"You don't have access to enter club"<<endl;
+                    break;
+                }
+                int num_of_club;
+                vector<string> clubs;
+                string name,ID;
+                cout << "Enter details of member,\nName: ";
+                cin >> name;
+                cout<< "ID: ";
+                cin >> ID;
+                cout<< "Total no of clubs: ";
+                cin >> num_of_club;
+                clubs.resize(num_of_club);
+                cout<< "Enter clubs name (one by one) : "<<endl;
+                for(int i=0;i<num_of_club;i++){
+                    cin>>clubs[i];
+                }
+                add_member_in_file(name,ID,clubs);
+                break;
+            }
+            case 7:
                 cout << "Exiting the program..." << endl;
                 return 0;
             default:
