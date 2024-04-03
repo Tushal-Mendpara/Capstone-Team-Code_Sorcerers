@@ -179,6 +179,60 @@ void search_by_club_category(ClubCategory category){
 }
 
 
+void remove_member_by_id(string& student_id) {
+    ifstream file("ClubMembersDetails.csv");
+    if(!file.is_open()){
+        cerr<<"Unable to open file"<<endl;
+        return;
+    }
+    ofstream newFile("new_ClubMembersDetails.csv");
+    if(!newFile.is_open()){
+        cerr<<"Unable to create new file"<<endl;
+        file.close();
+        return;
+    }
+    string line;
+    bool found = false;
+    while (getline(file,line)) {
+        stringstream ss(line);
+        string name,id,club;
+        getline(ss,name,',');
+        getline(ss,id,',');
+        if (id == student_id) {
+            found = true;
+            continue;
+        }
+        newFile<<line<<endl;
+    }
+    file.close();
+    newFile.close();
+    if(remove("ClubMembersDetails.csv") != 0){
+        cerr<<"Error deleting file"<<endl;
+        return;
+    }
+    if(rename("new_ClubMembersDetails.csv","ClubMembersDetails.csv") != 0){
+        cerr<<"Error renaming file"<<endl;
+        return;
+    }
+    if (found) {
+        cout<<"Member with ID "<<student_id<<" has been successfully removed."<<endl;
+        for(auto it = member_hash_table.begin(); it != member_hash_table.end(); ++it){
+            if(it->second.student_id==student_id){
+                string member_name = it->first;
+                for(const string& club : it->second.clubs){
+                    if(club_hash_table.find(club)!=club_hash_table.end()){
+                        auto& members=club_hash_table[club].members;
+                        members.erase(remove(members.begin(),members.end(),member_name),members.end());
+                    }
+                }
+                member_hash_table.erase(member_name);
+                return;
+            }
+        }
+    }
+    cout<<"Member with ID "<<student_id<<" not found."<<endl;
+}
+
 void print_category(void){
     cout<<"1. Arts"<<endl;
     cout<<"2. Technical"<<endl;
@@ -264,7 +318,6 @@ int read_ClubCategories(const char* filename){
     return 0;
 }
 
-
 int main(){
     int x=0,y=0;
     y=read_ClubCategories("ClubCategoriesDetails.csv");
@@ -272,9 +325,9 @@ int main(){
     if(x==1 || y==1){
         return 0;
     }
-    string pass="Daiict@2023",epass;
+    string pass="Daiict@2023";
     int choice=0;
-    while(choice<7){    
+    while(choice<8){    
         cout<<"Select search type:"<<endl;
         cout<<"1. Search by club name"<<endl;
         cout<<"2. Search by member name"<<endl;
@@ -282,7 +335,8 @@ int main(){
         cout<<"4. Search by club category"<<endl;
         cout<<"5. Add new club" <<endl;
         cout<<"6. Add new member" <<endl;
-        cout<<"7. Exit"<<endl; // Added option to exit the program
+        cout<<"7. Remove member by ID"<<endl;
+        cout<<"8. Exit"<<endl;
         cout<<"Enter your choice: ";
         cin>>choice;
         cout<<endl;
@@ -320,6 +374,7 @@ int main(){
             }
             case 5:{
                 cout<<"Enter Password : ";
+                string epass;
                 cin>>epass;
                 if(epass!=pass){
                     cout<<"Wrong Password"<<endl;
@@ -340,6 +395,7 @@ int main(){
             }
             case 6:{
                 cout<<"Enter Password : ";
+                string epass;
                 cin>>epass;
                 if(epass!=pass){
                     cout<<"Wrong Password"<<endl;
@@ -364,7 +420,22 @@ int main(){
                 add_member(name,ID,clubs);
                 break;
             }
-            case 7:
+            case 7:{
+                cout<<"Enter Password : ";
+                string epass;
+                cin>>epass;
+                if(epass!=pass){
+                    cout<<"Wrong Password"<<endl;
+                    cout<<"You don't have access to add member"<<endl;
+                    break;
+                }
+                string student_id;
+                cout<<"Enter member ID to remove: ";
+                cin>>student_id;
+                remove_member_by_id(student_id);
+                break;
+            }
+            case 8:
                 cout<<"Exiting the program..."<<endl;
                 return 0;
             default:
