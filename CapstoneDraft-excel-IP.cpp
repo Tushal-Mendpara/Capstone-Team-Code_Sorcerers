@@ -328,7 +328,7 @@ int main(){
     string pass="Daiict@2023";
     int choice=0;
     while(choice<8){    
-        cout<<"Select search type:"<<endl;
+        cout<<"Select Option from below:"<<endl;
         cout<<"1. Search by club name"<<endl;
         cout<<"2. Search by member name"<<endl;
         cout<<"3. Search by member ID"<<endl;
