@@ -165,7 +165,7 @@ void search_by_club_category(ClubCategory category){
                 cout<<"Member: "<<member.name<<",ID: "<<member.student_id<< ","<<str_category(category)<<" clubs: ";
                 t=1;
                 }
-                cout<<club <<" ";
+                cout<<club<<" ";
                 flage=true;
                 
             }
@@ -218,11 +218,12 @@ int read_ClubCategories(const char* filename){
     }
 
     // Read club categories from the file and populate club_categories map
-    string club,category,line;
-    while(getline(categoryFile,line)){
+    string club, category, line;
+    unordered_set<ClubCategory> printedCategories; // Keep track of printed categories
+    while(getline(categoryFile, line)){
         stringstream ss(line);
-        getline(ss,club,',');
-        getline(ss,category,',');
+        getline(ss, club, ',');
+        getline(ss, category, ',');
         ClubCategory x;
         if(category=="Arts"){
             x=Arts;
@@ -240,12 +241,30 @@ int read_ClubCategories(const char* filename){
             x=Sports;
         }
         club_hash_table[club].category=x;
-      
     }
     categoryFile.close();
+
+    // Print categories along with their corresponding clubs
+    cout<<"Categories and their corresponding clubs:"<<endl;
+    for(auto& entry : club_hash_table) {
+        // Check if category has been printed already
+        if(printedCategories.find(entry.second.category)==printedCategories.end()) {
+            cout<<"Category: "<<str_category(entry.second.category)<<endl;
+            cout<<"Clubs: ";
+            for(auto& clubEntry : club_hash_table) {
+                if(clubEntry.second.category==entry.second.category) {
+                    cout<<clubEntry.first<<", ";
+                }
+            }
+            cout<<endl<<endl;
+            printedCategories.insert(entry.second.category);
+        }
+    }
   
     return 0;
 }
+
+
 int main(){
     int x=0,y=0;
     y=read_ClubCategories("ClubCategoriesDetails.csv");
