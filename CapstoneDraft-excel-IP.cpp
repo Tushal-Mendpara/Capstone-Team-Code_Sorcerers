@@ -108,6 +108,7 @@ void search_by_club_name(string& club_name){
 
 // Function to search for members by name
 void search_by_member_name(string& member_name){
+    cout<<endl;
     auto it=member_hash_table.find(member_name);
     if(it!=member_hash_table.end()){
         Member& member=it->second;
@@ -128,6 +129,7 @@ void search_by_member_name(string& member_name){
 
 // Function to search for members by ID
 void search_by_id(string& student_id){
+    cout<<endl;
     for(auto& entry : member_hash_table){
         if(entry.second.student_id==student_id){
             cout<<"Member: "<<entry.first<<",ID: "<<student_id<<"\n";
@@ -149,32 +151,29 @@ void search_by_id(string& student_id){
 
 // Function to search for members by club category
 void search_by_club_category(ClubCategory category){
+    cout<<endl;
     string category_str=str_category(category);
     if(category_str==""){
         cout<<"Invalid club category"<<endl;
         return;
     }
-    
-    bool flage=false;
-    for(auto& entry : member_hash_table){
-         Member& member=entry.second;
-        bool t=0;
-        for(string& club : member.clubs){
-            if(club_hash_table[club].category==category){
-                if(t==0){
-                cout<<"Member: "<<member.name<<",ID: "<<member.student_id<< ","<<str_category(category)<<" clubs: ";
-                t=1;
-                }
-                cout<<club<<" ";
-                flage=true;
-                
-            }
+    bool flag=false;
+    // Iterate through club hash table
+    for(auto& entry : club_hash_table){
+        club& current_club=entry.second;
+
+        // Check if club belongs to the given category
+        if(current_club.category==category){
+            flag=true;
+            cout<<"Club: "<<entry.first<<endl;
+            string x=entry.first;
+            search_by_club_name(x);
+            cout<<endl;
         }
-        if(t==1)
-        cout<<endl;
     }
-    if(!flage){
-        cout<<"No members found in the "<<category_str<<" category"<<endl;
+    // If no clubs found in the given category
+    if(!flag){
+        cout << "No clubs found in the " << category_str << " category with members" << endl;
     }
 }
 
