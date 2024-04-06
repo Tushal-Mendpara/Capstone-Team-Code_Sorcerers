@@ -46,14 +46,15 @@ void add_member_in_file(string& name,string& student_id,vector<string>& clubs){
         cout<<"Unable to open club members file"<<endl;
         return;
     }
-    memberFile<<endl;
     memberFile<<name<<","<<student_id;
     for(string& club : clubs){
         memberFile<<","<<club;
     }
+    memberFile<<endl;
     memberFile.close();
     cout<<"New member "<<name<<" added successfully"<<endl;
 }
+
 string str_category(ClubCategory category){
     string category_str;
     switch(category){
@@ -80,7 +81,6 @@ void add_new_club(string& club_name,ClubCategory category){
         cout<<"Unable to open club category file"<<endl;
         return;
     }
-    categoryFile<<endl;
     categoryFile<<club_name<<",";
     string categoryFilestr=str_category(category);
     if(categoryFilestr==""){
@@ -88,42 +88,43 @@ void add_new_club(string& club_name,ClubCategory category){
         return;
     }
     categoryFile<<categoryFilestr;
+    categoryFile<<endl;
     categoryFile.close();
 }
 
 // Function to search for members by club name
 void search_by_club_name(string& club_name){
     if(club_hash_table.find(club_name)==club_hash_table.end()){
-        cout<<"Club not found"<<endl;
+        cout<<"   Club not found."<<endl;
         return;
     }
     bool flage=false;
-     vector<string>& members=club_hash_table[club_name].members;
+    vector<string>& members=club_hash_table[club_name].members;
     for(string& member_name : members){
         flage=true;
-        cout<<"Member: "<<member_name<<",ID: "<<member_hash_table[member_name].student_id<<endl;
+        cout<<"  Member : "<<member_name<<" ,  ID: "<<member_hash_table[member_name].student_id<<endl;
     }
-    if(!flage) cout<<"This club has no members."<<endl;
+    if(!flage) cout<<"  This club has no members."<<endl;
 }
 
 // Function to search for members by name
 void search_by_member_name(string& member_name){
-    cout<<endl;
     auto it=member_hash_table.find(member_name);
     if(it!=member_hash_table.end()){
+        cout<<endl;
         Member& member=it->second;
-        cout<<"Member: "<<member_name<<",ID: "<<member.student_id<<"\n";
-        cout<<"Clubs: ";
+        cout<<"  Member : "<<member_name<<" ,  ID: "<<member.student_id<<"\n";
+        cout<<"  Clubs : ";
         for(int i=0; i < member.clubs.size(); ++i){
             cout<<member.clubs[i];
             if(i!=member.clubs.size() - 1){
-                cout<<",";
+                cout<<", ";
             }
         }
         cout<<endl;
     }
     else{
-        cout<<"Member not found"<<endl;
+        cout<<"  Member not found."<<endl;
     }
 }
 
@@ -132,29 +133,28 @@ void search_by_id(string& student_id){
     cout<<endl;
     for(auto& entry : member_hash_table){
         if(entry.second.student_id==student_id){
-            cout<<"Member: "<<entry.first<<",ID: "<<student_id<<"\n";
-            cout<<"Clubs: ";
-             Member& member=entry.second;
+            cout<<"  Member : "<<entry.first<<" ,  ID : "<<student_id<<"\n";
+            cout<<"  Clubs : ";
+            Member& member=entry.second;
             for(int i=0; i < member.clubs.size(); ++i){
                 cout<<member.clubs[i];
                 if(i!=member.clubs.size() - 1){
-                    cout<<",";
+                    cout<<", ";
                 }
             }
             cout<<endl;
             return;
         }
     }
-    cout<<"Member with ID "<<student_id<<" not found"<<endl;
+    cout<<"  Member with ID "<<student_id<<" not found"<<endl;
 }
-
 
 // Function to search for members by club category
 void search_by_club_category(ClubCategory category){
     cout<<endl;
     string category_str=str_category(category);
     if(category_str==""){
-        cout<<"Invalid club category"<<endl;
+        cout<<"  Invalid club category"<<endl;
         return;
     }
     bool flag=false;
@@ -173,10 +173,9 @@ void search_by_club_category(ClubCategory category){
     }
     // If no clubs found in the given category
     if(!flag){
-        cout << "No clubs found in the " << category_str << " category with members" << endl;
+        cout << " No clubs found in the " << category_str << " category with members" << endl;
     }
 }
-
 
 void remove_member_by_id(string& student_id) {
     ifstream file("ClubMembersDetails.csv");
@@ -232,13 +231,33 @@ void remove_member_by_id(string& student_id) {
     cout<<"Member with ID "<<student_id<<" not found."<<endl;
 }
 
-void print_category(void){
-    cout<<"1. Arts"<<endl;
-    cout<<"2. Technical"<<endl;
-    cout<<"3. Social"<<endl;
-    cout<<"4. General"<<endl;
-    cout<<"5. Sports"<<endl;
+void view_all_members_by_club_and_category() {
+    //Iterate through each club category
+    for(int i=0;i<5;++i) {
+        ClubCategory category=static_cast<ClubCategory>(i);
+        string category_str=str_category(category);
+        cout<<"<<===---- Category => "<<category_str<<" ----===>>"<<endl;
+
+        //Iterate through each club in the category
+        for(auto& club_entry : club_hash_table){
+            if(club_entry.second.category==category){
+                string club_name=club_entry.first;
+                cout<<" Club: "<<club_name<<endl;
+                search_by_club_name(club_name);
+            }
+        }
+        cout << endl;
+    }
 }
+
+void print_category(void){
+    cout<<"\t1) Arts"<<endl;
+    cout<<"\t2) Technical"<<endl;
+    cout<<"\t3) Social"<<endl;
+    cout<<"\t4) General"<<endl;
+    cout<<"\t5) Sports"<<endl;
+}
+
 int read_ClubMembersDetails(const char* filename){
     ifstream file(filename);
     if(!file.is_open()){
@@ -263,6 +282,7 @@ int read_ClubMembersDetails(const char* filename){
 
     return 0;
 }
+
 int read_ClubCategories(const char* filename){
     ifstream categoryFile(filename);
     if(!categoryFile.is_open()){
@@ -298,12 +318,12 @@ int read_ClubCategories(const char* filename){
     categoryFile.close();
 
     // Print categories along with their corresponding clubs
-    cout<<"Categories and their corresponding clubs:"<<endl;
+    cout<<"Categories and their corresponding clubs:\n"<<endl;
     for(auto& entry : club_hash_table) {
         // Check if category has been printed already
-        if(printedCategories.find(entry.second.category)==printedCategories.end()) {
-            cout<<"Category: "<<str_category(entry.second.category)<<endl;
-            cout<<"Clubs: ";
+        if(printedCategories.find(entry.second.category)==printedCategories.end()){
+            cout<<"\t<<==--- Category => "<<str_category(entry.second.category)<<" ---==>>"<<endl;
+            cout<<"Clubs : ";
             for(auto& clubEntry : club_hash_table) {
                 if(clubEntry.second.category==entry.second.category) {
                     cout<<clubEntry.first<<", ";
@@ -313,11 +333,13 @@ int read_ClubCategories(const char* filename){
             printedCategories.insert(entry.second.category);
         }
     }
-  
     return 0;
 }
 
 int main(){
+    cout<<"<<------------------------------------------->>"<<endl;
+    cout<<"\tWelcome to DA-IICT Club Manager!"<<endl;
+    cout<<"<<------------------------------------------->>\n"<<endl;
     int x=0,y=0;
     y=read_ClubCategories("ClubCategoriesDetails.csv");
     x=read_ClubMembersDetails("ClubMembersDetails.csv"); 
@@ -326,92 +348,96 @@ int main(){
     }
     string pass="Daiict@2023";
     int choice=0;
-    while(choice<8){    
-        cout<<"Select Option from below:"<<endl;
-        cout<<"1. Search by club name"<<endl;
-        cout<<"2. Search by member name"<<endl;
-        cout<<"3. Search by member ID"<<endl;
-        cout<<"4. Search by club category"<<endl;
-        cout<<"5. Add new club" <<endl;
-        cout<<"6. Add new member" <<endl;
-        cout<<"7. Remove member by ID"<<endl;
-        cout<<"8. Exit"<<endl;
-        cout<<"Enter your choice: ";
+    while(choice<9){
+        cout<<"<-------------------------------------------------->"<<endl;    
+        cout<<"<<<====-----  Select Option from below  -----====>>>"<<endl;
+        cout<<"\t  1. Search by club name"<<endl;
+        cout<<"\t  2. Search by member name"<<endl;
+        cout<<"\t  3. Search by member ID"<<endl;
+        cout<<"\t  4. Search by club category"<<endl;
+        cout<<"\t  5. Add new club" <<endl;
+        cout<<"\t  6. Add new member" <<endl;
+        cout<<"\t  7. Remove member by ID"<<endl;
+        cout<<"\t  8. View all members by club and category"<<endl;
+        cout<<"\t  9. Exit"<<endl;
+        cout<<"<-------------------------------------------------->"<<endl;    
+        cout<<"  Enter your choice : ";
         cin>>choice;
         cout<<endl;
+        cout<<"---------------------------------->>"<<endl;
         // Perform search based on user choice
         switch(choice){
             case 1:{
                 string club_name;
-                cout<<"Enter club name: ";
+                cout<<"  --==>>> Enter club name : ";
                 cin>>club_name;
                 search_by_club_name(club_name);
                 break;
             }
             case 2:{
                 string member_name;
-                cout<<"Enter member name: ";
+                cout<<" --==>>> Enter member name : ";
                 cin>>member_name;
                 search_by_member_name(member_name);
                 break;
             }
             case 3:{
                 string student_id;
-                cout<<"Enter member ID: ";
+                cout<<" --==>>> Enter member ID : ";
                 cin>>student_id;
                 search_by_id(student_id);
                 break;
             }
             case 4:{
-                cout<<"Select club category:"<<endl;
+                cout<<" --==>>> Select club category <<<==--"<<endl;
                 print_category();
-                cout<<"Enter category number: ";
+                cout<<"  => Enter category number : ";
                 int category_choice;
                 cin>>category_choice;
                 search_by_club_category(static_cast<ClubCategory>(category_choice - 1));
                 break;
             }
             case 5:{
-                cout<<"Enter Password : ";
+                cout<<" --==>>> Enter Password : ";
                 string epass;
                 cin>>epass;
                 if(epass!=pass){
-                    cout<<"Wrong Password"<<endl;
-                    cout<<"You don't have access to add club"<<endl;
+                    cout<<"  Wrong Password."<<endl;
+                    cout<<"  You don't have access to add club"<<endl;
                     break;
                 }
                 string club_name;
                 int category_choice;
-                cout<<"Enter the name of the new club: ";
+                cout<<" => Enter the name of the new club : ";
                 cin>>club_name;
-                cout<<"Select category for the club:"<<endl;
+                cout<<" => Select category for the club : "<<endl;
                 print_category();
-                cout<<"Enter category number: ";
+                cout<<" => Enter category number : ";
                 cin>>category_choice;
                 add_new_club(club_name,static_cast<ClubCategory>(category_choice - 1));
                 club_hash_table[club_name].category=static_cast<ClubCategory>(category_choice-1);
                 break;
             }
             case 6:{
-                cout<<"Enter Password : ";
+                cout<<" --==>>> Enter Password : ";
                 string epass;
                 cin>>epass;
                 if(epass!=pass){
-                    cout<<"Wrong Password"<<endl;
-                    cout<<"You don't have access to add member"<<endl;
+                    cout<<"  Wrong Password"<<endl;
+                    cout<<"  You don't have access to add member"<<endl;
                     break;
                 }
                 int num_of_club;
                 vector<string> clubs;
                 string name,ID;
-                cout<<"Enter details of member,\nName: ";
+                cout<<" ---> Enter details of member,\n => Name : ";
                 cin>>name;
-                cout<< "ID: ";
+                cout<<" => ID : ";
                 cin>>ID;
-                cout<< "Total no of clubs: ";
+                cout<<" => Total no of clubs : ";
                 cin>>num_of_club;
                 clubs.resize(num_of_club);
-                cout<<"Enter clubs name(one by one) : "<<endl;
+                cout<<" => Enter clubs name(one by one) : "<<endl;
                 for(int i=0;i<num_of_club;i++){
                     cin>>clubs[i];
                 }
@@ -420,27 +446,33 @@ int main(){
                 break;
             }
             case 7:{
-                cout<<"Enter Password : ";
+                cout<<" --==>>> Enter Password : ";
                 string epass;
                 cin>>epass;
                 if(epass!=pass){
-                    cout<<"Wrong Password"<<endl;
-                    cout<<"You don't have access to add member"<<endl;
+                    cout<<"  Wrong Password"<<endl;
+                    cout<<"  You don't have access to add member"<<endl;
                     break;
                 }
                 string student_id;
-                cout<<"Enter member ID to remove: ";
+                cout<<" => Enter member ID to remove : ";
                 cin>>student_id;
                 remove_member_by_id(student_id);
                 break;
             }
-            case 8:
-                cout<<"Exiting the program..."<<endl;
+            case 8:{
+                view_all_members_by_club_and_category();
+                break;
+            }
+            case 9:
+                cout<<"   Exiting the program.....  "<<endl;
+                cout<<"------------------------------------->>>"<<endl;
                 return 0;
             default:
-                cout<<"Invalid choice"<<endl;
+                cout<<"  Invalid choice"<<endl;
                 break;
         }
+        cout<<"------------------------------------->>>"<<endl;
         cout<<endl;
     }
     return 0;
