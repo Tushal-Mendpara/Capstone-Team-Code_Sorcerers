@@ -527,7 +527,7 @@ int main(){
                     cout<<" _____________________________________"<<endl;
                     cout<<"|                                     |"<<endl;
                     cout<<"|           WRONG PASSWORD            |"<<endl;
-                    cout<<"|  YOU DON'T HAVE ACCESS TO ADD CLUB  |"<<endl;
+                    cout<<"| YOU DON'T HAVE ACCESS TO ADD MEMBER |"<<endl;
                     cout<<"|_____________________________________|"<<endl;
                     break;
                 }
@@ -557,7 +557,7 @@ int main(){
                     cout<<" _____________________________________"<<endl;
                     cout<<"|                                     |"<<endl;
                     cout<<"|           WRONG PASSWORD            |"<<endl;
-                    cout<<"|  YOU DON'T HAVE ACCESS TO ADD CLUB  |"<<endl;
+                    cout<<"|  YOU DON'T HAVE ACCESS TO REMOVE ID |"<<endl;
                     cout<<"|_____________________________________|"<<endl;
                     break;
                 }
