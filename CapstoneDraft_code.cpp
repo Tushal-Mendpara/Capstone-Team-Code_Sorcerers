@@ -22,6 +22,7 @@ struct club{
     vector<string> members;
 };
 
+
 // Hash table to index members by club
 unordered_map<string,club> club_hash_table;
 
@@ -136,8 +137,11 @@ void search_by_club_name(string club_name) {
     cout << "| " << setw(maxNameLength) << left << "MEMBERS" << "| " << setw(maxIdLength) << left << "ID" << " |" << endl;
     cout << "|--------------------------------|" << endl;
     for (string& member_name : members) {
+        char x;
+        if(member_hash_table[member_name].student_id.size()==9) x='S';
+        else x='F';
         flag = true;
-        cout << "| " << setw(maxNameLength) << left << member_name << "| " << setw(maxIdLength) << left << member_hash_table[member_name].student_id << " |" << endl;
+        cout << "| " <<x<<":"<< setw(maxNameLength-2) << left << member_name << "| " << setw(maxIdLength) << left << member_hash_table[member_name].student_id << " |" << endl;
     }
     if (!flag) 
     cout << "|     This club has no members   |" << endl;
@@ -153,12 +157,16 @@ void search_by_member_name() {
     auto it = member_hash_table.find(member_name);
     if (it != member_hash_table.end()) {
         Member& member = it->second;
+        string type;
+        if(member.student_id.size()==9) type="Student";
+        else type="Faculty";
         int num_clubs = member.clubs.size();
         int max_length = max((int)member_name.length(), (int)member.student_id.length());
         cout << " _____________________________________" << endl;
         cout << "|                                     |" << endl;
         cout << "|             MEMBER DETAILS          |" << endl;
         cout << "|-------------------------------------|" << endl;
+        cout << "|         Type: " << setw(22) << left << type << "|" << endl;
         cout << "|         Name: " << setw(22) << left << member_name << "|" << endl;
         cout << "|         ID:   " << setw(22) << left << member.student_id << "|" << endl;
         cout << "|         Clubs:                      |" << endl;
@@ -185,12 +193,16 @@ void search_by_id() {
     for (auto& entry : member_hash_table) {
         if (entry.second.student_id == student_id) {
             Member& member = entry.second;
+            string type;
+            if(member.student_id.size()==9) type="Student";
+            else type="Faculty";
             int num_clubs = member.clubs.size();
             int max_length = max((int)entry.first.length(), (int)student_id.length());
             cout << " _____________________________________" << endl;
             cout << "|                                     |" << endl;
             cout << "|             MEMBER DETAILS          |" << endl;
             cout << "|-------------------------------------|" << endl;
+            cout << "|         Type: " << setw(22) << left << type << "|" << endl;
             cout << "|         Name: " << setw(22) << left <<entry.first << "|" << endl;
             cout << "|         ID:   " << setw(22) << left << student_id << "|" << endl;
             cout << "|         Clubs:                      |" << endl;
@@ -313,7 +325,7 @@ void remove_member_by_id(string& student_id) {
         return;
     }
     if (found) {
-         cout<<" _____________________________________"<<endl;
+        cout<<" _____________________________________"<<endl;
         cout<<"|                                     |"<<endl;
         cout<<"|      Member of this id removed      |"<<endl;
         cout<<"|_____________________________________|"<<endl;
@@ -441,6 +453,12 @@ int main(){
     cout<<".";
     }
     system("cls");
+    cout<<" _____________________________________ "<<endl;
+    cout<<"|                                     |"<<endl;
+    cout<<"|          IN MEMBER DETAILS          |"<<endl;
+    cout<<"|       S:  REPRESENTS  STUDENT       |"<<endl;
+    cout<<"|       F:  REPRESENTS  FACULTY       |"<<endl;
+    cout<<"|_____________________________________|"<<endl;
 
     int x=0,y=0;
     y=read_ClubCategories("ClubCategoriesDetails.csv");
@@ -473,7 +491,7 @@ int main(){
         cout<<"      Enter your choice: ";
         cin>>choice;
         system("cls");
-        // Perform search based on user choice
+        // Perform search based on user choice 
         switch(choice){
             case 1:{
                  string club_name;
@@ -534,8 +552,9 @@ int main(){
                 int num_of_club;
                 vector<string> clubs;
                 string name,ID;
-                cout<<"Enter details of member,\nName: ";
+                cout<<"Enter details of member,\nName (Only Firstname): ";
                 cin>>name;
+                cout<<"For Student enter ID of 9 digits\nFor Faculty enter ID of 4 digits\n";
                 cout<< "ID: ";
                 cin>>ID;
                 cout<< "Total no of clubs: ";
@@ -588,7 +607,13 @@ int main(){
                 system("cls");
                 cout<<" _____________________________________"<<endl;
                 cout<<"|                                     |"<<endl;
-                cout<<"|            THANK YOU :)             |"<<endl;
+                cout<<"|         --<< THANK YOU >>--         |"<<endl;
+                cout<<"|                                     |"<<endl;
+                cout<<"|  TEAM MEMBERS :-                    |"<<endl;
+                cout<<"|           TUSHAL MENDPARA           |"<<endl;
+                cout<<"|           MANAV PATEL               |"<<endl;
+                cout<<"|           VED DONDA                 |"<<endl;
+                cout<<"|           DARSHAN RAMANI            |"<<endl;
                 cout<<"|_____________________________________|"<<endl;
                 return 0;
             }
