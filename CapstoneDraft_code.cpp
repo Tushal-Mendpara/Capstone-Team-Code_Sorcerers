@@ -47,10 +47,10 @@ void add_member_in_file(string& name,string& student_id,vector<string>& clubs){
     // Append member to the file
     ofstream memberFile("ClubMembersDetails.csv",ios::app);
     if(!memberFile.is_open()){
-         cout<<"_"<<endl;
+         cout<<"_____________________________________"<<endl;
         cout<<"|                                     |"<<endl;
         cout<<"|         Unable to open file         |"<<endl;
-        cout<<"|_|"<<endl;
+        cout<<"|_____________________________________|"<<endl;
         return;
     }
     memberFile<<endl;
@@ -62,7 +62,7 @@ void add_member_in_file(string& name,string& student_id,vector<string>& clubs){
         cout<<" _____________________________________"<<endl;
         cout<<"|                                     |"<<endl;
         cout<<"|    New member added successfully    |"<<endl;
-        cout<<"|_|"<<endl;
+        cout<<"|_____________________________________|"<<endl;
     
 }
 string str_category(ClubCategory category){
@@ -88,20 +88,20 @@ void add_new_club(string& club_name,ClubCategory category){
     // Append club and category to the file
     ofstream categoryFile("ClubCategoriesDetails.csv",ios::app);
     if(!categoryFile.is_open()){
-        cout<< "_"<<endl;
+        cout<< "_____________________________________"<<endl;
         cout<<"|                                     |"<<endl;
         cout<<"|         Unable to open file         |"<<endl;
-        cout<<"|_|"<<endl;
+        cout<<"|_____________________________________|"<<endl;
         return;
     }
     categoryFile<<endl;
     categoryFile<<club_name<<",";
     string categoryFilestr=str_category(category);
     if(categoryFilestr==""){
-         cout<<"_"<<endl;
+         cout<<"_____________________________________"<<endl;
         cout<<"|                                     |"<<endl;
         cout<<"|         INVALID CLUB CATEGORY       |"<<endl;
-        cout<<"|_|"<<endl;
+        cout<<"|_____________________________________|"<<endl;
         return;
     }
     categoryFile<<categoryFilestr;
@@ -110,7 +110,7 @@ void add_new_club(string& club_name,ClubCategory category){
         cout<<" _____________________________________"<<endl;
         cout<<"|                                     |"<<endl;
         cout<<"|     New club added successfully     |"<<endl;
-        cout<<"|_|"<<endl;
+        cout<<"|_____________________________________|"<<endl;
 }
 
 // Function to search for members by club name
@@ -120,7 +120,7 @@ void search_by_club_name(string club_name) {
         cout << " _____________________________________" << endl;
         cout << "|                                     |" << endl;
         cout << "|          INVALID CLUB NAME          |" << endl;
-        cout << "|_|" << endl;
+        cout << "|_____________________________________|" << endl;
         return;
     }
     bool flag = false;
@@ -145,7 +145,7 @@ void search_by_club_name(string club_name) {
     }
     if (!flag) 
     cout << "|     This club has no members   |" << endl;
-    cout << "||" << endl;
+    cout << "|________________________________|" << endl;
 }
 
 
@@ -175,12 +175,12 @@ void search_by_member_name() {
         cout << "|           " << setw(26) << left << member.clubs[i] << "|" << endl;
         }
        
-        cout << "|_|" << endl;
+        cout << "|_____________________________________|" << endl;
     } else {
         cout << " _____________________________________" << endl;
         cout << "|                                     |" << endl;
         cout << "|         MEMBER NOT FOUND            |" << endl;
-        cout << "|_|" << endl;
+        cout << "|_____________________________________|" << endl;
     }
 }
 
@@ -210,7 +210,7 @@ void search_by_id() {
             cout << "|           " << setw(26) << left << member.clubs[i] << "|" << endl;
             }
 
-            cout << "|_|" << endl;
+            cout << "|_____________________________________|" << endl;
             found = true;
             break;
         }
@@ -219,7 +219,7 @@ void search_by_id() {
         cout << " _____________________________________" << endl;
         cout << "|                                     |" << endl;
         cout << "|    Member of this id is not found   |" << endl;
-        cout << "|_|" << endl;
+        cout << "|_____________________________________|" << endl;
     }
 }
 
@@ -232,7 +232,7 @@ void print_category(void){
     cout<<"|    3. Social     |"<<endl;
     cout<<"|    4. General    |"<<endl;
     cout<<"|    5. Sports     |"<<endl;
-    cout<<"||"<<endl;
+    cout<<"|__________________|"<<endl;
 }
 
 // Function to search for members by club category
@@ -245,10 +245,10 @@ void search_by_club_category(){
     ClubCategory category=static_cast<ClubCategory>(category_choice - 1);
     string category_str=str_category(category);
     if(category_str==""){
-         cout<<"_"<<endl;
+         cout<<"_____________________________________"<<endl;
         cout<<"|                                     |"<<endl;
         cout<<"|        INVALID CLUB CATEGORY        |"<<endl;
-        cout<<"|_|"<<endl;
+        cout<<"|_____________________________________|"<<endl;
         return;
     }
 
@@ -264,10 +264,10 @@ void search_by_club_category(){
         }
    
     if(!flage){
-         cout<<"_"<<endl;
+         cout<<"_____________________________________"<<endl;
         cout<<"|                                     |"<<endl;
         cout<<"|        CATEGORY HAS NO MEMBER       |"<<endl;
-        cout<<"|_|"<<endl;
+        cout<<"|_____________________________________|"<<endl;
     }
 }
 
@@ -328,7 +328,7 @@ void remove_member_by_id(string& student_id) {
         cout<<" _____________________________________"<<endl;
         cout<<"|                                     |"<<endl;
         cout<<"|      Member of this id removed      |"<<endl;
-        cout<<"|_|"<<endl;
+        cout<<"|_____________________________________|"<<endl;
         for(auto it = member_hash_table.begin(); it != member_hash_table.end(); ++it){
             if(it->second.student_id==student_id){
                 string member_name = it->first;
@@ -346,7 +346,7 @@ void remove_member_by_id(string& student_id) {
         cout<<" _____________________________________"<<endl;
         cout<<"|                                     |"<<endl;
         cout<<"|      Member of this id not found    |"<<endl;
-        cout<<"|_|"<<endl;
+        cout<<"|_____________________________________|"<<endl;
 }
 
 
@@ -380,7 +380,7 @@ int read_ClubCategories(const char* filename){
         cout<<" _____________________________________"<<endl;
         cout<<"|                                     |"<<endl;
         cout<<"|         Unable to open file         |"<<endl;
-        cout<<"|_|"<<endl;
+        cout<<"|_____________________________________|"<<endl;
         return 1;
     }
 
@@ -422,7 +422,7 @@ void printclubandcategories() {
     cout << "|                                     |" << endl;
     cout << "|  Categories and their corresponding |" << endl;
     cout << "|               clubs:                |" << endl;
-    cout << "|_|" << endl;
+    cout << "|_____________________________________|" << endl;
     for(auto& categoryEntry : club_hash_table) {
         // Check if category has been printed already
         if(printedCategories.find(categoryEntry.second.category) == printedCategories.end()) {
@@ -433,7 +433,7 @@ void printclubandcategories() {
                     cout << "|    - " << setw(30) << left << clubEntry.first << " |" << endl;
                 }
             }
-            cout << "|_|" << endl;
+            cout << "|_____________________________________|" << endl;
             printedCategories.insert(categoryEntry.second.category);
         }
     }
@@ -446,7 +446,7 @@ int main(){
     cout<<" _____________________________________"<<endl;
     cout<<"|                                     |"<<endl;
     cout<<"|   ENTERING THE CLUB MANAGER MENU    |"<<endl;
-    cout<<"|_|"<<endl;
+    cout<<"|_____________________________________|"<<endl;
     cout<<"                 ";
     for(int i=0;i<5;i++){
     Sleep(500);
@@ -458,7 +458,7 @@ int main(){
     cout<<"|          IN MEMBER DETAILS          |"<<endl;
     cout<<"|       S:  REPRESENTS  STUDENT       |"<<endl;
     cout<<"|       F:  REPRESENTS  FACULTY       |"<<endl;
-    cout<<"|_|"<<endl;
+    cout<<"|_____________________________________|"<<endl;
 
     int x=0,y=0;
     y=read_ClubCategories("ClubCategoriesDetails.csv");
@@ -487,7 +487,7 @@ int main(){
         cout<<"|     8. Add new member               |"<<endl;
         cout<<"|     9. Remove member by ID          |"<<endl;
         cout<<"|     10. Exit                        |"<<endl;
-        cout<<"|_|"<<endl;
+        cout<<"|_____________________________________|"<<endl;
         cout<<"      Enter your choice: ";
         cin>>choice;
         system("cls");
@@ -522,7 +522,7 @@ int main(){
                     cout<<"|                                     |"<<endl;
                     cout<<"|           WRONG PASSWORD            |"<<endl;
                     cout<<"|  YOU DON'T HAVE ACCESS TO ADD CLUB  |"<<endl;
-                    cout<<"|_|"<<endl;
+                    cout<<"|_____________________________________|"<<endl;
                     break;
                 }
                 string club_name;
@@ -546,7 +546,7 @@ int main(){
                     cout<<"|                                     |"<<endl;
                     cout<<"|           WRONG PASSWORD            |"<<endl;
                     cout<<"| YOU DON'T HAVE ACCESS TO ADD MEMBER |"<<endl;
-                    cout<<"|_|"<<endl;
+                    cout<<"|_____________________________________|"<<endl;
                     break;
                 }
                 int num_of_club;
@@ -577,7 +577,7 @@ int main(){
                     cout<<"|                                        |"<<endl;
                     cout<<"|             WRONG PASSWORD             |"<<endl;
                     cout<<"| YOU DON'T HAVE ACCESS TO REMOVE MEMBER |"<<endl;
-                    cout<<"||"<<endl;
+                    cout<<"|________________________________________|"<<endl;
                     break;
                 }
                 string student_id;
@@ -598,7 +598,7 @@ int main(){
                 cout<<" _____________________________________"<<endl;
                 cout<<"|                                     |"<<endl;
                 cout<<"|      EXITING THE CLUB MANAGER       |"<<endl;
-                cout<<"|_|"<<endl;
+                cout<<"|_____________________________________|"<<endl;
                 cout<<"                 ";
                 for(int i=0;i<5;i++){
                 Sleep(500);
@@ -614,14 +614,14 @@ int main(){
                 cout<<"|           MANAV PATEL               |"<<endl;
                 cout<<"|           VED DONDA                 |"<<endl;
                 cout<<"|           DARSHAN RAMANI            |"<<endl;
-                cout<<"|_|"<<endl;
+                cout<<"|_____________________________________|"<<endl;
                 return 0;
             }
             default:{
                 cout<<" _____________________________________"<<endl;
                 cout<<"|                                     |"<<endl;
                 cout<<"|            INVALID CHOICE           |"<<endl;
-                cout<<"|_|"<<endl;
+                cout<<"|_____________________________________|"<<endl;
             }
         }
     }
