@@ -353,7 +353,7 @@ int read_ClubMembersDetails(const char* filename){
         getline(ss,name,',');
         getline(ss,student_id,',');
         while(getline(ss,club,',')){
-            clubs.push_back(club);
+            if(!club.empty()) clubs.push_back(club);
         }
         add_member(name,student_id,clubs);
     }
